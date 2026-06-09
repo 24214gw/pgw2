@@ -1,262 +1,258 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>돈쭐(Money-Coach) : AI 청소년 금융 멘토</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        body { background-color: #0B0F19; color: #F3F4F6; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatGPT 질문 답변 페이지</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    .container {
+      width: min(900px, 92%);
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .info {
+      padding: 14px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      resize: vertical;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      font-size: 16px;
+      line-height: 1.5;
+      outline: none;
+      font-family: Arial, sans-serif;
+    }
+
+    textarea:focus {
+      border-color: #42a5f5;
+      box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0 18px;
+      height: 46px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.15s;
+      font-weight: bold;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+
+    .ask-btn {
+      background: #42a5f5;
+      color: white;
+    }
+
+    .clear-btn {
+      background: #b0bec5;
+      color: white;
+    }
+
+    .answer-box {
+      min-height: 220px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #f7f9fb;
+      border: 1px solid #edf1f5;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status {
+      min-height: 24px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .help {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #777;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .button-row {
+        justify-content: stretch;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-<body class="flex flex-col min-h-screen font-sans">
+<body>
+  <div class="container">
+    <h1>ChatGPT 질문 답변</h1>
+    <div class="subtitle">GitHub Pages + Google Apps Script + OpenAI API 연동</div>
 
-    <header class="flex justify-between items-center p-5 border-b border-gray-800 bg-gray-900/50 backdrop-blur">
-        <h1 class="text-2xl font-bold text-emerald-400 tracking-wide">💰 돈쭐 (Money-Coach)</h1>
-        <div>
-            <button id="loginBtn" onclick="toggleLogin()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg shadow-md transition duration-200">
-                구글 로그인
-            </button>
-            <span id="userInfo" class="hidden text-sm text-gray-400 mr-2"></span>
-        </div>
-    </header>
+    <div class="info">
+      현재 구조: GitHub Pages 화면 → Google Apps Script 서버 → OpenAI API → 답변 반환<br />
+      API Key는 index.html에 들어가지 않고 Apps Script의 스크립트 속성에 저장됩니다.
+    </div>
 
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6 mt-6">
-        
-        <section class="flex-1 bg-gray-900 border border-gray-800 p-6 rounded-2xl flex flex-col justify-between">
-            <div>
-                <h2 class="text-lg font-semibold text-gray-400 mb-4">나의 가상 자산 대시보드</h2>
-                <div class="bg-gray-800/50 p-4 rounded-xl mb-4 border border-gray-700/50">
-                    <p class="text-xs text-gray-400">현재 총 자산</p>
-                    <p id="userBalance" class="text-3xl font-bold text-emerald-400 mt-1">100,000 원</p>
-                </div>
-                <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50">
-                    <p class="text-xs text-gray-400">금융 지식 신용 점수</p>
-                    <p id="userScore" class="text-2xl font-bold text-blue-400 mt-1">750 점</p>
-                </div>
-            </div>
-            <p class="text-xs text-gray-500 mt-4">※ AI 코칭을 받고 올바른 선택을 하면 자산과 점수가 실시간(Firebase)으로 업데이트됩니다.</p>
-        </section>
+    <div class="chat-box">
+      <div>
+        <div class="label">질문</div>
+        <textarea id="questionInput" placeholder="질문을 입력하세요. 예: 고등학생에게 파이썬 반복문을 쉽게 설명해줘."></textarea>
+      </div>
 
-        <section class="flex-[1.5] bg-gray-900 border border-gray-800 rounded-2xl flex flex-col overflow-hidden h-[500px]">
-            <div class="bg-gray-800/50 p-4 border-b border-gray-800 flex items-center justify-between">
-                <span class="font-medium text-emerald-400">🤖 AI 자산관리사 '돈쭐이'</span>
-                <span id="statusDot" class="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            </div>
+      <div class="button-row">
+        <button class="clear-btn" id="clearBtn">초기화</button>
+        <button class="ask-btn" id="askBtn">질문하기</button>
+      </div>
 
-            <div id="chatBox" class="flex-1 p-4 overflow-y-auto space-y-4">
-                <div class="flex items-start">
-                    <div class="bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">
-                        반갑습니다! 미래의 자산가님. 오늘 하신 소비나 투자 고민을 저에게 말씀해 주세요. '돈쭐'나게 분석해 드립니다!
-                    </div>
-                </div>
-            </div>
+      <div id="status" class="status"></div>
 
-            <div class="p-4 border-t border-gray-800 bg-gray-900/50">
-                <div class="flex gap-2">
-                    <input id="userInput" type="text" placeholder="예) 오늘 세일하는 5만원짜리 신발 살까?" class="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white" onkeydown="if(event.key==='Enter') sendMessage()">
-                    <button onclick="sendMessage()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-3 rounded-xl text-sm transition">
-                        전송
-                    </button>
-                </div>
-            </div>
-        </section>
+      <div>
+        <div class="label">답변</div>
+        <div id="answerBox" class="answer-box">아직 답변이 없습니다.</div>
+      </div>
 
-    </main>
+      <div class="help">
+        단축키: 질문 입력창에서 Ctrl + Enter를 누르면 질문이 전송됩니다.<br />
+        오류가 발생하면 Apps Script 배포 권한이 “모든 사용자”인지 확인하세요.
+      </div>
+    </div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZqANPGjac4uAsffYzVHLVVF0uHThfHqmYy1sMu9EnI_7AGcVSX6xYQNM4vDm8E6-B/exec';
 
-        window.isLoggedIn = false;
-        window.dbSave = async function(balance, score) { console.log("데모 모드 데이터 변경:", balance, score); };
+    const questionInput = document.getElementById('questionInput');
+    const answerBox = document.getElementById('answerBox');
+    const statusBox = document.getElementById('status');
+    const askBtn = document.getElementById('askBtn');
+    const clearBtn = document.getElementById('clearBtn');
 
-        // TODO: 실제 Firebase 연결 시 아래 주석을 풀고 사용하세요.
-        /*
-        const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+    askBtn.addEventListener('click', askChatGPT);
+    clearBtn.addEventListener('click', clearPage);
 
-        window.toggleLogin = async () => {
-            if (!window.isLoggedIn) { await signInWithPopup(auth, provider); }
-            else { await signOut(auth); location.reload(); }
-        };
+    questionInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) {
+        askChatGPT();
+      }
+    });
 
-        onAuthStateChanged(auth, async (user) => {
-            const loginBtn = document.getElementById("loginBtn");
-            const userInfo = document.getElementById("userInfo");
-            if (user) {
-                window.isLoggedIn = true;
-                loginBtn.innerText = "로그아웃";
-                userInfo.innerText = `${user.displayName}님`;
-                userInfo.classList.remove("hidden");
-                
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-                if (userDoc.exists()) {
-                    document.getElementById("userBalance").innerText = userDoc.data().balance.toLocaleString() + " 원";
-                    document.getElementById("userScore").innerText = userDoc.data().score + " 점";
-                } else {
-                    await setDoc(userDocRef, { balance: 100000, score: 750 });
-                }
+    async function askChatGPT() {
+      const question = questionInput.value.trim();
 
-                window.dbSave = async (newBalance, newScore) => {
-                    await setDoc(userDocRef, { balance: newBalance, score: newScore }, { merge: true });
-                };
-            }
+      if (!question) {
+        alert('질문을 입력해주세요.');
+        return;
+      }
+
+      try {
+        setLoading(true);
+        answerBox.textContent = '답변을 생성하는 중입니다...';
+        statusBox.textContent = 'Apps Script 서버에 요청을 보내는 중입니다.';
+
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            question: question
+          })
         });
-        */
-    </script>
 
-    <script>
-        let currentBalance = 100000;
-        let currentScore = 750;
+        const data = await response.json();
 
-        if (!window.toggleLogin) {
-            window.toggleLogin = function() {
-                window.isLoggedIn = !window.isLoggedIn;
-                const loginBtn = document.getElementById("loginBtn");
-                const userInfo = document.getElementById("userInfo");
-                
-                if(window.isLoggedIn) {
-                    loginBtn.innerText = "로그아웃";
-                    userInfo.innerText = "CEO 테스트 유저님";
-                    userInfo.classList.remove("hidden");
-                } else {
-                    loginBtn.innerText = "구글 로그인";
-                    userInfo.classList.add("hidden");
-                }
-            };
-        }
-    </script>
-
-    <script>
-        // TODO: 실제 AI를 실시간 가동하려면 본인의 Gemini API 키를 입력하세요!
-        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
-
-        async function sendMessage() {
-            const input = document.getElementById("userInput");
-            const text = input.value.trim();
-            if (!text) return;
-
-            // 1. 내가 보낸 메시지 화면에 띄우기
-            appendMessage(text, 'user');
-            input.value = "";
-
-            // 2. 로딩 애니메이션 띄우기
-            appendMessage("돈쭐이 분석 중...", 'ai-loading');
-            
-            // 3. 에러 차단형 AI 반응 엔진 가동
-            try {
-                let responseText = "";
-
-                // API 키가 없거나 기본 상태일 때 작동하는 시뮬레이터 (발표 안전장치)
-                if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
-                    responseText = await getDemoResponse(text);
-                } else {
-                    // 실제 API 키가 입력되어 있다면 연동 진행
-                    responseText = await callGeminiAPI(text);
-                }
-                
-                // 로딩 창 지우고 대답 넣기
-                document.getElementById("chatBox").lastElementChild.remove();
-                appendMessage(responseText, 'ai');
-
-                // 4. TTS (음성 읽기) 즉각 실행
-                speak(responseText);
-
-            } catch (error) {
-                console.error(error);
-                document.getElementById("chatBox").lastElementChild.remove();
-                // 완전히 네트워크가 끊겼을 때를 대비한 최종 백업 메시지
-                const fallbackText = "지금은 소비 계획을 정비할 타이밍입니다. 한 번 더 생각해 보세요.";
-                appendMessage(fallbackText, 'ai');
-                speak(fallbackText);
-            }
+        if (data.error) {
+          throw new Error(data.error);
         }
 
-        // 대화창 말풍선 렌더링 함수
-        function appendMessage(text, sender) {
-            const chatBox = document.getElementById("chatBox");
-            const msgDiv = document.createElement("div");
-            msgDiv.className = "flex " + (sender === 'user' ? "justify-end" : "justify-start");
-            
-            let bubbleClass = "p-3 rounded-2xl max-w-[80%] text-sm ";
-            if(sender === 'user') bubbleClass += "bg-emerald-500 text-white rounded-tr-none";
-            else if(sender === 'ai') bubbleClass += "bg-gray-800 text-gray-200 rounded-tl-none";
-            else bubbleClass += "bg-gray-800 text-gray-500 italic rounded-tl-none animate-pulse"; 
+        answerBox.textContent = data.answer || '답변을 가져오지 못했습니다.';
+        statusBox.textContent = '답변 생성 완료';
+      } catch (error) {
+        console.error(error);
+        answerBox.textContent = '오류가 발생했습니다.\n\n' + error.message;
+        statusBox.textContent = '요청 실패';
+      } finally {
+        setLoading(false);
+      }
+    }
 
-            msgDiv.innerHTML = `<div class="${bubbleClass}">${text}</div>`;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight; 
-        }
+    function setLoading(isLoading) {
+      askBtn.disabled = isLoading;
+      askBtn.textContent = isLoading ? '생성 중...' : '질문하기';
+    }
 
-        // [핵심] API 키 없이도 30초 시연을 캐리하는 무적의 데모 함수
-        function getDemoResponse(inputText) {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    let reply = "";
-                    if (inputText.includes("신발") || inputText.includes("사") || inputText.includes("지출")) {
-                        currentBalance -= 35000;
-                        currentScore -= 15;
-                        reply = "지출이 발생했군! 신발을 꼭 사야 했나? 자산이 35,000원 줄었고 신용 점수가 깎였다. 다음엔 참아라!";
-                    } else if (inputText.includes("돈") || inputText.includes("저축") || inputText.includes("알바")) {
-                        currentBalance += 50000;
-                        currentScore += 20;
-                        reply = "훌륭하다! 저축과 수입 창출은 금융 자산가로 가는 지름길이지. 자산과 금융 신용 지식을 보상으로 주마!";
-                    } else {
-                        currentScore += 5;
-                        reply = "흥미로운 금융 질문이군. 합리적인 예산 범위 내에서 판단했다면 인정하겠다. 자산관리에 계속 집중해라!";
-                    }
-
-                    // 대시보드 실시간 그래픽 갱신 효과
-                    document.getElementById("userBalance").innerText = currentBalance.toLocaleString() + " 원";
-                    document.getElementById("userScore").innerText = currentScore + " 점";
-
-                    // 파이어베이스 저장 트리거 동기화
-                    if(typeof window.dbSave === 'function') {
-                        window.dbSave(currentBalance, currentScore);
-                    }
-
-                    resolve(reply);
-                }, 800); // 0.8초의 리얼한 생각 시간 부여
-            });
-        }
-
-        // 실제 라이브 Gemini API 허브
-        async function callGeminiAPI(prompt) {
-            const systemInstruction = "너는 청소년을 위한 깐깐한 AI 자산관리사 '돈쭐이'야. 경제적 개념을 섞어 반말로 딱 2문장 이내로 충고해줘.";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-            
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: systemInstruction + "\n\n질문: " + prompt }] }]
-                })
-            });
-            const data = await response.json();
-            return data.candidates[0].content.parts[0].text;
-        }
-
-        // 웹 표준 TTS 엔진 가동
-        function speak(text) {
-            window.speechSynthesis.cancel(); 
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = "ko-KR";
-            speech.rate = 1.1; 
-            window.speechSynthesis.speak(speech);
-        }
-    </script>
+    function clearPage() {
+      questionInput.value = '';
+      answerBox.textContent = '아직 답변이 없습니다.';
+      statusBox.textContent = '';
+    }
+  </script>
 </body>
 </html>
+
