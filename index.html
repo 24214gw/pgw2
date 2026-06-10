@@ -187,14 +187,15 @@
 
     // 팩트 체크: 본인의 Firebase 프로젝트 설정(Config)을 복사해서 여기에 넣으시면 연동이 완료됩니다.
     const firebaseConfig = {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyDG_Rb40GvwisGKDtSqLXUYN87JO7tsdSE",
+      authDomain: "test-ad453.firebaseapp.com",
+      databaseURL: "https://test-ad453-default-rtdb.firebaseio.com",
+      projectId: "test-ad453",
+      storageBucket: "test-ad453.firebasestorage.app",
+      messagingSenderId: "595840516346",
+      appId: "1:595840516346:web:7faa85b427d422d926c943",
+      measurementId: "G-WYJ960780L"
     };
-
     // Firebase 초기화
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
