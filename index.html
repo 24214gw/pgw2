@@ -118,8 +118,8 @@
 
     .login-btn { background: #38bdf8; color: #0f172a; }
     .signup-btn { background: #475569; color: #f8fafc; }
-    .logout-btn { background: #ef4444; color: #white; height: 38px; font-size: 13px; border-radius: 8px; }
-    .add-btn { background: #10b981; color: #white; }
+    .logout-btn { background: #ef4444; color: white; height: 38px; font-size: 13px; border-radius: 8px; }
+    .add-btn { background: #10b981; color: white; }
     .refresh-btn { background: #475569; color: #f8fafc; margin-bottom: 20px; }
     .edit-btn { background: #f59e0b; color: #0f172a; height: 36px; font-size: 13px; }
     .delete-btn { background: #ef4444; color: white; height: 36px; font-size: 13px; }
@@ -142,7 +142,7 @@
       text-align: center;
     }
 
-    /* 탑바 안내 탭 */
+    /* 상단 안내 바 */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -157,26 +157,23 @@
     .user-info { font-size: 14px; color: #94a3b8; }
     .user-info strong { color: #38bdf8; }
 
-    /* 탭 메뉴 전환 구조 */
-    .navigation-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      border-bottom: 2px solid #334155;
-      padding-bottom: 8px;
+    /* 각 기능 구별 박스 */
+    .section-block {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 30px;
     }
 
-    .tab-button {
-      background: transparent;
-      color: #94a3b8;
-      border-radius: 8px;
-      height: 40px;
-      font-size: 14px;
-    }
-
-    .tab-button.active {
-      background: #334155;
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
       color: #38bdf8;
+      margin-top: 0;
+      margin-bottom: 16px;
+      border-left: 4px solid #38bdf8;
+      padding-left: 10px;
     }
 
     /* 포트폴리오 관리 폼 레이아웃 */
@@ -224,7 +221,7 @@
     }
     
     .answer-box {
-      min-height: 180px;
+      min-height: 140px;
       line-height: 1.7;
       white-space: pre-wrap;
       word-break: break-word;
@@ -247,7 +244,6 @@
 
     @media (max-width: 768px) {
       .form-box, .item, .edit-box, .option-box { grid-template-columns: 1fr; }
-      .navigation-tabs { flex-direction: column; }
       .button-row button, .download-link { width: 100%; }
     }
   </style>
@@ -279,13 +275,8 @@
         <button class="logout-btn" id="logoutBtn">액세스 종료 (로그아웃)</button>
       </div>
 
-      <div class="navigation-tabs">
-        <button class="tab-button active" onclick="switchTab('portfolio')">💼 금융 자산 및 리스크 지표 트래킹</button>
-        <button class="tab-button" onclick="switchTab('consulting')">📊 AI 금융 리서치 & 리스크 컨설팅</button>
-        <button class="tab-button" onclick="switchTab('tts')">🎙️ 오디오 브리핑 자산화 변환기 (TTS)</button>
-      </div>
-
-      <div id="portfolioTab" class="tab-content">
+      <div class="section-block">
+        <div class="section-title">💼 금융 자산 및 리스크 지표 트래킹</div>
         <div class="form-box">
           <input id="titleInput" type="text" placeholder="자산 항목 / 금융 지표 명칭 (예: 삼성전자, 나스닥지수)" />
           <input id="contentInput" type="text" placeholder="보유 비중 및 자산군 리스크 요약 평가" />
@@ -296,7 +287,8 @@
         <div id="dataList" class="list"></div>
       </div>
 
-      <div id="consultingTab" class="tab-content hidden">
+      <div class="section-block">
+        <div class="section-title">📊 AI 금융 리서치 & 리스크 컨설팅</div>
         <div class="label">시장 분석 및 컨설팅 쿼리 질의</div>
         <textarea id="questionInput" placeholder="금융 분석 쿼리를 입력하세요. 예: 금리 인상 시기에 채권과 성장주 포트폴리오의 리스크 헤징 전략을 SWOT 분석 형태로 제시해줘."></textarea>
         <div class="button-row">
@@ -310,7 +302,8 @@
         </div>
       </div>
 
-      <div id="ttsTab" class="tab-content hidden">
+      <div class="section-block">
+        <div class="section-title">🎙️ 오디오 브리핑 자산화 변환기 (TTS)</div>
         <div class="option-box">
           <select id="modelSelect">
             <option value="tts-1">tts-1 (고속 브리핑 렌더링)</option>
@@ -349,7 +342,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import { getDatabase, ref, push, set, update, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // 🔗 [설정 A] 파이어베이스 연동 보안 식별 구조 키셋
+    // 🔗 파이어베이스 오리지널 설정 데이터 구조체
     const firebaseConfig = {
       apiKey: 'AIzaSyDO-v52Ehwphh5gW0WBzu9_DliMhOzy4Yo',
       authDomain: 'kang-f4e85.firebaseapp.com',
@@ -365,11 +358,10 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    // 🔗 [설정 B] 구글 앱스 스크립트(GAS) 프록시 보안 서버 미들웨어 우회 엔드포인트
-    // (이전 대화에서 나눴던 ChatGPT 및 TTS 병합 처리가 완료된 통합 GAS 웹앱 URL입니다)
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDNMIktE288seW2Mr5YgksYFeAP3SNl8YyQZFa1DuvD0N_8pjRLDmxkZBYyQ4WGPmt/exec';
+    // 🔗 구글 앱스 스크립트(GAS) 통합 엔드포인트 URL
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyB3Ux6o8TexZFmYQp2WAPp8NVb22Q7Glu-LXo9UBDlH2wTXZ6tcdIBJNeoirVXUs9C/exec';
 
-    // UI 요소 포인터 바인딩
+    // UI 요소 바인딩
     const authSection = document.getElementById('authSection');
     const mainSection = document.getElementById('mainSection');
     const emailInput = document.getElementById('emailInput');
@@ -403,15 +395,6 @@
 
     let currentUser = null;
     let currentItemsRef = null;
-
-    // 탭 메뉴 레이아웃 변환 통제 제어 스위치
-    window.switchTab = function(tabName) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
-      
-      document.getElementById(`${tabName}Tab`).classList.remove('hidden');
-      event.currentTarget.classList.add('active');
-    };
 
     function getEmailAndPassword() {
       const email = emailInput.value.trim();
@@ -459,7 +442,7 @@
       }
     });
 
-    // 파이어베이스 실시간 데이터 관리 스트림 모듈
+    // 파이어베이스 실시간 데이터 동기화 관리
     function startRealtimeDataListener(uid) {
       stopRealtimeDataListener();
       statusBox.textContent = '클라우드 노드 자산 동기화 중...';
@@ -542,7 +525,7 @@
       `;
     };
 
-    // 📊 [기능 B] AI 금융 리서치 컨설팅 통신 파이프라인 (ChatGPT 연동)
+    // 📊 [기능 2] AI 금융 리서치 컨설팅 (ChatGPT 연동)
     askBtn.addEventListener('click', askChatGPT);
     async function askChatGPT() {
       const question = questionInput.value.trim();
@@ -554,7 +537,7 @@
 
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ question: question }) // 일반 텍스트 질의
+          body: JSON.stringify({ question: question })
         });
         const data = await response.json();
         if (data.error) throw new Error(data.error);
@@ -567,7 +550,7 @@
       } finally { askBtn.disabled = false; askBtn.textContent = '분석 리포트 생성'; }
     }
 
-    // 🎙️ [기능 C] 금융 리포트 청각화 스트리밍 시스템 (OpenAI TTS 연동)
+    // 🎙️ [기능 3] 금융 리포트 청각화 스트리밍 시스템 (OpenAI TTS 연동)
     makeBtn.addEventListener('click', makeSpeech);
     async function makeSpeech() {
       const text = textInput.value.trim();
@@ -584,7 +567,7 @@
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
-            type: 'tts', // 밸브 처리 스위칭용 명시 플래그
+            type: 'tts', // 오디오 서버 유무 식별용 플래그
             text: text, model: model, voice: voice, speed: speed
           })
         });
@@ -615,11 +598,10 @@
       return URL.createObjectURL(new Blob(byteArrays, { type: mimeType }));
     }
 
-    // 초기화 함수 유틸
+    // 초기화 유틸리티
     window.clearConsulting = function() { questionInput.value = ''; answerBox.textContent = '전략 질의 대기 중...'; consultingStatus.textContent = ''; };
     window.clearTTS = function() { textInput.value = ''; ttsStatus.textContent = ''; audioPlayer.removeAttribute('src'); resultBox.classList.add('hidden'); };
 
-    // 안전 문자열 인코딩 및 엔터 제어 파트
     function escapeHTML(text) { return String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
     function escapeForAttribute(text) { return escapeHTML(text).replaceAll('`', '&#096;'); }
 
