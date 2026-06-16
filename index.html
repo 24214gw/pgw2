@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinTech AI: 지능형 금융 자산 분석 및 리스크 관리 대시보드</title>
+  <title>Smart Business Dashboard - AI 경영 관리 시스템</title>
   <style>
     * {
       box-sizing: border-box;
@@ -12,326 +12,488 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color: #f1f5f9;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6, #f3f4f6);
+      background-attachment: fixed;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #333;
     }
 
     .container {
       width: min(1000px, 94%);
       margin: 40px auto;
-      background: #1e293b;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 24px;
       padding: 32px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      border: 1px solid #334155;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
 
     h1 {
       margin: 0 0 8px;
       text-align: center;
-      font-size: 30px;
-      color: #38bdf8;
+      font-size: 32px;
+      color: #1e3a8a;
       font-weight: 800;
       letter-spacing: -0.5px;
     }
 
     .subtitle {
       text-align: center;
-      color: #94a3b8;
-      margin-bottom: 32px;
-      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 28px;
+      font-size: 15px;
+      font-weight: 500;
     }
 
     /* 인증 섹션 스타일 */
     .auth-box {
-      max-width: 400px;
+      max-width: 420px;
       margin: 40px auto;
-      background: #0f172a;
-      padding: 30px;
-      border-radius: 20px;
-      border: 1px solid #334155;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
+      background: #f8fafc;
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .auth-box h2 {
-      margin: 0;
+      margin: 0 0 10px;
       font-size: 22px;
-      color: #f8fafc;
       text-align: center;
+      color: #1e3a8a;
     }
 
-    /* 공통 입력창 스타일 */
+    .notice {
+      max-width: 420px;
+      margin: 20px auto 0;
+      padding: 14px;
+      border-radius: 14px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-size: 13px;
+      line-height: 1.6;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* 입력창 및 공통 스타일 */
     input, select, textarea {
-      width: 100%;
-      height: 48px;
-      padding: 0 16px;
-      border: 1px solid #334155;
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid #cbd5e1;
       border-radius: 12px;
       font-size: 15px;
       outline: none;
-      background: #0f172a;
-      color: #f8fafc;
-      transition: 0.2s;
-    }
-
-    textarea {
-      height: 140px;
-      padding: 16px;
-      resize: vertical;
-      line-height: 1.6;
+      transition: all 0.2s;
+      background-color: #ffffff;
     }
 
     input:focus, select:focus, textarea:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
 
-    /* 버튼 공통 스타일 */
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      resize: vertical;
+      padding: 16px;
+      line-height: 1.6;
+      font-family: inherit;
+    }
+
+    /* 버튼 마스터 스타일 */
     button, .download-link {
       border: none;
       border-radius: 12px;
       padding: 0 20px;
-      height: 48px;
+      height: 46px;
       font-size: 15px;
       cursor: pointer;
-      transition: 0.2s;
-      font-weight: bold;
+      transition: all 0.2s;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
+      gap: 6px;
     }
 
     button:hover, .download-link:hover {
       transform: translateY(-2px);
-      filter: brightness(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    button:active, .download-link:active {
+      transform: translateY(0);
     }
 
     button:disabled {
       cursor: not-allowed;
-      opacity: 0.5;
-      transform: none;
+      opacity: 0.6;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
-    .login-btn { background: #38bdf8; color: #0f172a; }
-    .signup-btn { background: #475569; color: #f8fafc; }
-    .logout-btn { background: #ef4444; color: white; height: 38px; font-size: 13px; border-radius: 8px; }
-    .add-btn { background: #10b981; color: white; }
-    .refresh-btn { background: #475569; color: #f8fafc; margin-bottom: 20px; }
-    .edit-btn { background: #f59e0b; color: #0f172a; height: 36px; font-size: 13px; }
-    .delete-btn { background: #ef4444; color: white; height: 36px; font-size: 13px; }
-    .save-btn { background: #10b981; color: white; height: 36px; font-size: 13px; }
-    .cancel-btn { background: #64748b; color: white; height: 36px; font-size: 13px; }
-    .ask-btn, .make-btn { background: #38bdf8; color: #0f172a; }
-    .clear-btn { background: #475569; color: #f8fafc; }
-    .download-link { background: #6366f1; color: white; }
+    .login-btn { background: #3b82f6; color: white; }
+    .signup-btn { background: #10b981; color: white; }
+    .logout-btn { background: #ef4444; color: white; }
+    .add-btn { background: #3b82f6; color: white; }
+    .refresh-btn { background: #6b7280; color: white; margin-bottom: 16px; }
+    .edit-btn { background: #f59e0b; color: white; }
+    .delete-btn { background: #ef4444; color: white; }
+    .save-btn { background: #10b981; color: white; }
+    .cancel-btn { background: #94a3b8; color: white; }
+    .ask-btn { background: #3b82f6; color: white; }
+    .clear-btn { background: #94a3b8; color: white; }
+    .make-btn { background: #3b82f6; color: white; }
+    .download-link { background: #8b5cf6; color: white; }
 
-    .notice {
-      max-width: 400px;
-      margin: 20px auto 0;
-      padding: 14px;
-      border-radius: 12px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    /* 상단 안내 바 */
+    /* 대시보드 구조 및 탑바 */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 28px;
+      gap: 12px;
+      margin-bottom: 24px;
       padding: 16px 20px;
       border-radius: 16px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
     }
 
-    .user-info { font-size: 14px; color: #94a3b8; }
-    .user-info strong { color: #38bdf8; }
-
-    /* 각 기능 구별 박스 */
-    .section-block {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 30px;
+    .user-info {
+      font-size: 15px;
+      color: #334155;
+      font-weight: 500;
     }
 
-    .section-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #38bdf8;
-      margin-top: 0;
-      margin-bottom: 16px;
-      border-left: 4px solid #38bdf8;
-      padding-left: 10px;
+    /* 탭 메뉴 스타일 */
+    .tab-menu {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
     }
 
-    /* 포트폴리오 관리 폼 레이아웃 */
+    .tab-btn {
+      background: transparent;
+      color: #64748b;
+      border-radius: 8px;
+      height: 40px;
+      font-size: 15px;
+    }
+
+    .tab-btn:hover {
+      background: #f1f5f9;
+      color: #1e3a8a;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .tab-btn.active {
+      background: #1e3a8a;
+      color: white;
+    }
+
+    .tab-btn.active:hover {
+      background: #1e3a8a;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 탭 내부 인포 윈도우 */
+    .info-box {
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 14px;
+      line-height: 1.6;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* 1번 탭: CRUD 비즈니스 데이터 보드 */
     .form-box {
       display: grid;
       grid-template-columns: 1fr 2fr auto;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 22px;
     }
 
     .status {
       min-height: 24px;
-      margin-bottom: 16px;
-      color: #38bdf8;
+      margin-bottom: 14px;
+      color: #64748b;
       font-size: 14px;
-      font-weight: 500;
+      font-style: italic;
     }
 
-    /* 데이터 리스트 카드 형태 */
-    .list { display: flex; flex-direction: column; gap: 14px; }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
     .item {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 16px;
+      gap: 12px;
       align-items: center;
-      padding: 20px;
+      padding: 18px;
       border-radius: 16px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
     }
 
-    .item-title { margin: 0 0 6px; font-size: 18px; font-weight: bold; color: #f8fafc; }
-    .item-content { margin: 0; color: #94a3b8; line-height: 1.6; word-break: break-all; }
-    .item-date { margin-top: 10px; font-size: 12px; color: #475569; }
-    .item-actions { display: flex; gap: 8px; }
-    .edit-box { display: grid; grid-template-columns: 1fr 2fr auto auto; gap: 10px; width: 100%; }
-
-    /* 결과 피드백 박스 */
-    .result-section {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 16px;
-      background: #0f172a;
-      border: 1px solid #334155;
+    .item-title {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
     }
-    
+
+    .item-content {
+      margin: 0;
+      color: #475569;
+      line-height: 1.6;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    .item-date {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .edit-box {
+      display: grid;
+      grid-template-columns: 1fr 2fr auto auto;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: #94a3b8;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      font-style: italic;
+    }
+
+    /* 2, 3번 탭 공통 및 결과 상자 */
+    .label {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #334155;
+      font-size: 15px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
     .answer-box {
-      min-height: 140px;
+      min-height: 200px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       line-height: 1.7;
       white-space: pre-wrap;
       word-break: break-word;
-      color: #cbd5e1;
+      color: #334155;
     }
 
     .option-box {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
-    .button-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
-    .label { font-weight: bold; margin-bottom: 8px; color: #38bdf8; font-size: 15px; }
-    .empty { text-align: center; padding: 40px; color: #475569; background: #0f172a; border-radius: 16px; }
-    .hidden { display: none; }
-    
-    audio { width: 100%; margin-top: 14px; }
+    .result-box {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
 
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .help {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* 반응형 레이아웃 */
     @media (max-width: 768px) {
-      .form-box, .item, .edit-box, .option-box { grid-template-columns: 1fr; }
-      .button-row button, .download-link { width: 100%; }
+      .form-box, .item, .edit-box, .option-box {
+        grid-template-columns: 1fr;
+      }
+      .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .logout-btn, .button-row button, .download-link {
+        width: 100%;
+      }
+      .item-actions {
+        justify-content: flex-end;
+      }
+      .tab-menu {
+        flex-direction: column;
+        gap: 4px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>FinTech AI Intelligence Hub</h1>
-    <div class="subtitle">보안 자산 포트폴리오 관리 및 초거대 생성형 AI 기반 시장 리스크 헤징 플랫폼</div>
+    <h1>Smart Business Dashboard</h1>
+    <div class="subtitle">AI 비즈니스 기획 및 파이어베이스 경영 데이터 자산 관리 플랫폼</div>
 
     <section id="authSection">
       <div class="auth-box">
-        <h2>금융 네트워크 보안 인증</h2>
-        <input id="emailInput" type="email" placeholder="보안 허브 등록 이메일" />
-        <input id="passwordInput" type="password" placeholder="엑세스 비밀번호 (6자리 이상)" />
-        <button class="login-btn" id="loginBtn">시스템 액세스 (로그인)</button>
-        <button class="signup-btn" id="signupBtn">신규 허브 등록 (회원가입)</button>
+        <h2>플랫폼 접근 인증</h2>
+        <input id="emailInput" type="email" placeholder="비즈니스 이메일 계정" />
+        <input id="passwordInput" type="password" placeholder="비밀번호 (6자리 이상)" />
+        <button class="login-btn" id="loginBtn">로그인</button>
+        <button class="signup-btn" id="signupBtn">신규 가입 신청</button>
       </div>
       <div class="notice">
-        본 시스템은 허가된 금융 데이터 인프라입니다. <br/>
-        최초 사용 시 회원가입 후 보안 액세스가 승인됩니다.
+        <strong>💡 시스템 안내</strong><br />
+        경영 동아리 연구 및 개인 비즈니스 포트폴리오 관리를 위한 통합 허브입니다. 처음 접근하시는 경우 이메일과 비밀번호를 지정해 가입 프로세스를 먼저 진행해 주세요.
       </div>
     </section>
 
     <section id="mainSection" class="hidden">
       <div class="top-bar">
         <div class="user-info">
-          연동 인프라 노드 계정: <strong id="userEmail"></strong>
+          접속 세션 권한: <strong id="userEmail" style="color:#1e3a8a;"></strong>
         </div>
-        <button class="logout-btn" id="logoutBtn">액세스 종료 (로그아웃)</button>
+        <button class="logout-btn" id="logoutBtn">플랫폼 로그아웃</button>
       </div>
 
-      <div class="section-block">
-        <div class="section-title">💼 금융 자산 및 리스크 지표 트래킹</div>
-        <div class="form-box">
-          <input id="titleInput" type="text" placeholder="자산 항목 / 금융 지표 명칭 (예: 삼성전자, 나스닥지수)" />
-          <input id="contentInput" type="text" placeholder="보유 비중 및 자산군 리스크 요약 평가" />
-          <button class="add-btn" id="addBtn">지표 등록</button>
+      <div class="tab-menu">
+        <button class="tab-btn active" onclick="switchTab('dataTab')">📁 경영 데이터 허브</button>
+        <button class="tab-btn" onclick="switchTab('aiTab')">🤖 AI 비즈니스 컨설턴트</button>
+        <button class="tab-btn" onclick="switchTab('ttsTab')">🎙️ AI 마케팅 브로드캐스터</button>
+      </div>
+
+      <div id="dataTab" class="tab-content active">
+        <div class="info-box">
+          📊 <strong>데이터 전략실:</strong> 실시간 파이어베이스 DB 기술을 통해 기획 아이디어, 마켓 인텔리전스, 가치 사슬 분석 데이터를 보안이 유지되는 사용자 독립 노드(`users/{uid}/items`)에 영구 보존합니다.
         </div>
-        <button class="refresh-btn" id="refreshBtn">자산 동기화 새로고침</button>
+        <div class="form-box">
+          <input id="titleInput" type="text" placeholder="분석 지표 / 아이디어 명칭" />
+          <input id="contentInput" type="text" placeholder="핵심 경영 인사이트 및 추진 전략 세부사항 요약 입력" />
+          <button class="add-btn" id="addBtn">지표 추가</button>
+        </div>
         <div id="status" class="status"></div>
         <div id="dataList" class="list"></div>
       </div>
 
-      <div class="section-block">
-        <div class="section-title">📊 AI 금융 리서치 & 리스크 컨설팅</div>
-        <div class="label">시장 분석 및 컨설팅 쿼리 질의</div>
-        <textarea id="questionInput" placeholder="금융 분석 쿼리를 입력하세요. 예: 금리 인상 시기에 채권과 성장주 포트폴리오의 리스크 헤징 전략을 SWOT 분석 형태로 제시해줘."></textarea>
-        <div class="button-row">
-          <button class="clear-btn" onclick="clearConsulting()">입력창 초기화</button>
-          <button class="ask-btn" id="askBtn">분석 리포트 생성</button>
+      <div id="aiTab" class="tab-content">
+        <div class="info-box">
+          💡 <strong>전략 기획실:</strong> OpenAI 초거대 AI 모델 인프라를 활용하여 사업 아이템 타당성 검토, SWOT 분석, 타겟 마케팅 믹스(4P) 전략을 브레인스토밍합니다. (GAS 프록시 우회 암호화 통신 적용)
         </div>
-        <div id="consultingStatus" class="status"></div>
-        <div class="result-section">
-          <div class="label">AI 발급 실시간 자산 리서치 리포트</div>
-          <div id="answerBox" class="answer-box">전략 질의 대기 중...</div>
+        <div class="chat-box">
+          <div>
+            <div class="label">컨설팅 쿼리 (질문 기획)</div>
+            <textarea id="questionInput" placeholder="경영 관련 질의를 자유롭게 기획하세요. &#10;예: Z세대를 타겟으로 한 환경친화적 텀블러 구독 서비스의 비즈니스 모델 캔버스(BMC) 핵심 요소를 구조화해줘."></textarea>
+          </div>
+          <div class="button-row">
+            <button class="clear-btn" id="clearBtn">필드 초기화</button>
+            <button class="ask-btn" id="askBtn">분석 요청 실행</button>
+          </div>
+          <div id="aiStatus" class="status" style="margin-top:10px;"></div>
+          <div>
+            <div class="label">전략 도출 리포트 (답변 결과)</div>
+            <div id="answerBox" class="answer-box">전략 분석 쿼리가 대기 상태입니다. 질의를 작성한 뒤 실행을 요청하십시오.</div>
+          </div>
+          <div class="help">
+            💡 단축키 가이드: 입력창 안에서 <code>Ctrl + Enter</code> 키 조합을 입력하면 즉시 분석 쿼리가 전송됩니다.
+          </div>
         </div>
       </div>
 
-      <div class="section-block">
-        <div class="section-title">🎙️ 오디오 브리핑 자산화 변환기 (TTS)</div>
+      <div id="ttsTab" class="tab-content">
+        <div class="info-box">
+          📢 <strong>커뮤니케이션실:</strong> 고도화된 딥러닝 음성 합성 API 모델(OpenAI TTS)을 사용하여 마케팅 카피라이팅 문구, 엘리베이터 피치 스피치 대본을 오디오 자산(.mp3)으로 전형화하고 리스닝 테스트를 수행합니다.
+        </div>
         <div class="option-box">
           <select id="modelSelect">
-            <option value="tts-1">tts-1 (고속 브리핑 렌더링)</option>
-            <option value="tts-1-hd">tts-1-hd (고해상도 전문 오디오)</option>
+            <option value="tts-1">tts-1 (신속 피드백 엔진)</option>
+            <option value="tts-1-hd">tts-1-hd (고품질 오디오 마스터)</option>
           </select>
           <select id="voiceSelect">
-            <option value="onyx">onyx (묵직한 전문 금융 애널리스트 톤)</option>
-            <option value="alloy">alloy (표준 중립 브리핑 톤)</option>
-            <option value="echo">echo (부드러운 시황 분석 톤)</option>
-            <option value="fable">fable (서사 중심 입체적 톤)</option>
-            <option value="nova">nova (선명하고 기민한 뉴스 톤)</option>
-            <option value="shimmer">shimmer (브라이트한 아나운서 톤)</option>
+            <option value="alloy">alloy (차분한 범용 보이스)</option>
+            <option value="echo">echo (중후한 분석가 톤)</option>
+            <option value="fable">fable (서사적 내레이터)</option>
+            <option value="onyx">onyx (신뢰감 높은 경영진 톤)</option>
+            <option value="nova">nova (트렌디하고 밝은 톤)</option>
+            <option value="shimmer">shimmer (지적인 프로페셔널)</option>
           </select>
-          <input id="speedInput" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="오디오 배속" />
+          <input id="speedInput" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="재생 속도 배율" />
         </div>
-        <div class="label">청각화 변환용 금융 텍스트 스트링</div>
-        <textarea id="textInput" placeholder="음성 브리핑 자산 파일(.mp3)로 동적 인코딩할 텍스트 내용을 입력하세요."></textarea>
+        <div>
+          <div class="label">오디오 텍스트 시나리오</div>
+          <textarea id="textInput" placeholder="음성 자산으로 트랜스폼할 카피라이팅 시나리오나 비즈니스 스피치 원고를 입력하세요. &#10;예: 혁신적인 가치를 추구하는 스마트 비즈니스 플랫폼에 오신 것을 환영합니다. 본 자산은 인공지능 오디오 합성 솔루션을 기반으로 바인딩되어 송출 중입니다."></textarea>
+        </div>
         <div class="button-row">
-          <button class="clear-btn" onclick="clearTTS()">초기화</button>
+          <button class="clear-btn" id="clearTtsBtn">필드 초기화</button>
           <button class="make-btn" id="makeBtn">음성 자산 빌드</button>
         </div>
-        <div id="ttsStatus" class="status"></div>
-        <div id="resultBox" class="result-section hidden">
-          <div class="label">인코딩이 완료된 오디오 브리핑 스트림</div>
+        <div id="ttsStatus" class="status" style="margin-top:10px;"></div>
+        <div id="resultBox" class="result-box hidden">
+          <div class="label">출력 오디오 스트리밍 덱</div>
           <audio id="audioPlayer" controls></audio>
           <div class="button-row">
-            <a id="downloadLink" class="download-link" href="#" download>안전 마케팅 오디오 다운로드 (.mp3)</a>
+            <a id="downloadLink" class="download-link" href="#" download="business-pitch.mp3">다운로드 (.mp3 오디오 자산 백업)</a>
           </div>
+        </div>
+        <div class="help">
+          💡 시스템 제약 사항: 장문의 마케팅 카피는 압축 알고리즘으로 인해 처리 시간이 증가할 수 있으며, 배율 범위는 0.25배속에서 4.0배속을 엄수해 주십시오.
         </div>
       </div>
     </section>
@@ -339,10 +501,25 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { getDatabase, ref, push, set, update, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import {
+      getDatabase,
+      ref,
+      push,
+      set,
+      update,
+      remove,
+      onValue,
+      off
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // 🔗 파이어베이스 오리지널 설정 데이터 구조체
+    // 유저 공급 기반 Firebase 파라미터 컨피그 설정
     const firebaseConfig = {
       apiKey: 'AIzaSyDO-v52Ehwphh5gW0WBzu9_DliMhOzy4Yo',
       authDomain: 'kang-f4e85.firebaseapp.com',
@@ -354,14 +531,12 @@
       measurementId: 'G-DJ52YTYQZM'
     };
 
+    // 모듈 초기 인스턴스화
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    // 🔗 구글 앱스 스크립트(GAS) 통합 엔드포인트 URL
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyB3Ux6o8TexZFmYQp2WAPp8NVb22Q7Glu-LXo9UBDlH2wTXZ6tcdIBJNeoirVXUs9C/exec';
-
-    // UI 요소 바인딩
+    // DOM 노드 맵 레이아웃 바인딩
     const authSection = document.getElementById('authSection');
     const mainSection = document.getElementById('mainSection');
     const emailInput = document.getElementById('emailInput');
@@ -371,142 +546,212 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const userEmail = document.getElementById('userEmail');
 
+    // 탭 1 바인딩 컨트롤러
     const titleInput = document.getElementById('titleInput');
     const contentInput = document.getElementById('contentInput');
     const addBtn = document.getElementById('addBtn');
-    const refreshBtn = document.getElementById('refreshBtn');
     const dataList = document.getElementById('dataList');
     const statusBox = document.getElementById('status');
-
-    const questionInput = document.getElementById('questionInput');
-    const answerBox = document.getElementById('answerBox');
-    const consultingStatus = document.getElementById('consultingStatus');
-    const askBtn = document.getElementById('askBtn');
-
-    const textInput = document.getElementById('textInput');
-    const modelSelect = document.getElementById('modelSelect');
-    const voiceSelect = document.getElementById('voiceSelect');
-    const speedInput = document.getElementById('speedInput');
-    const makeBtn = document.getElementById('makeBtn');
-    const ttsStatus = document.getElementById('ttsStatus');
-    const resultBox = document.getElementById('resultBox');
-    const audioPlayer = document.getElementById('audioPlayer');
-    const downloadLink = document.getElementById('downloadLink');
 
     let currentUser = null;
     let currentItemsRef = null;
 
+    // 공통 상태 피드백 메커니즘
+    function setStatus(message) {
+      statusBox.textContent = message;
+    }
+
     function getEmailAndPassword() {
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
-      if (!email || !password) { alert('보안 계정 정보와 패스워드를 모두 검증하십시오.'); return null; }
-      if (password.length < 6) { alert('보안 강도를 위해 비밀번호는 6자리 이상 규격화 필수입니다.'); return null; }
+
+      if (!email || !password) {
+        alert('이메일 정보 및 유효 패스워드를 누락 없이 기입해 주십시오.');
+        return null;
+      }
+      if (password.length < 6) {
+        alert('계정 보안 프로토콜 상 패스워드는 최소 6자리 이상 규격입니다.');
+        return null;
+      }
       return { email, password };
     }
 
-    // Auth 프로세스 핸들링
+    // 인증 트랜잭션 핸들러
     signupBtn.addEventListener('click', async () => {
       const account = getEmailAndPassword();
       if (!account) return;
       try {
         await createUserWithEmailAndPassword(auth, account.email, account.password);
-        alert('신규 자산 노드 허브 등록 성공');
-      } catch (error) { alert(getKoreanErrorMessage(error.code)); }
+        alert('신규 비즈니스 계정 승인 및 가입 프로세스가 처리되었습니다.');
+      } catch (error) {
+        alert(getKoreanErrorMessage(error.code));
+      }
     });
 
     loginBtn.addEventListener('click', async () => {
       const account = getEmailAndPassword();
       if (!account) return;
-      try { await signInWithEmailAndPassword(auth, account.email, account.password); }
-      catch (error) { alert(getKoreanErrorMessage(error.code)); }
+      try {
+        await signInWithEmailAndPassword(auth, account.email, account.password);
+      } catch (error) {
+        alert(getKoreanErrorMessage(error.code));
+      }
     });
 
     logoutBtn.addEventListener('click', async () => {
-      try { await signOut(auth); } catch (error) { alert('세션 해제 실패'); }
+      try {
+        await signOut(auth);
+      } catch (error) {
+        alert('인증 세션 해제 트랜잭션이 실패했습니다.');
+      }
     });
 
+    // 글로벌 상태 라이프사이클 업저버 리스너 파이프라인
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
-        authSection.classList.add('hidden');
-        mainSection.classList.remove('hidden');
-        userEmail.textContent = user.email;
-        emailInput.value = ''; passwordInput.value = '';
+        showMainPage(user);
         startRealtimeDataListener(user.uid);
       } else {
         currentUser = null;
-        authSection.classList.remove('hidden');
-        mainSection.classList.add('hidden');
-        userEmail.textContent = ''; dataList.innerHTML = '';
+        showAuthPage();
         stopRealtimeDataListener();
       }
     });
 
-    // 파이어베이스 실시간 데이터 동기화 관리
+    function showMainPage(user) {
+      authSection.classList.add('hidden');
+      mainSection.classList.remove('hidden');
+      userEmail.textContent = user.email;
+      emailInput.value = '';
+      passwordInput.value = '';
+    }
+
+    function showAuthPage() {
+      authSection.classList.remove('hidden');
+      mainSection.classList.add('hidden');
+      userEmail.textContent = '';
+      dataList.innerHTML = '';
+    }
+
+    // 탭 1 데이터 노드 실시간 리스너 바인딩 아키텍처
     function startRealtimeDataListener(uid) {
       stopRealtimeDataListener();
-      statusBox.textContent = '클라우드 노드 자산 동기화 중...';
+      setStatus('실시간 노드 원격 데이터 풀링(Pooling) 처리 기동 중...');
+
       currentItemsRef = ref(database, `users/${uid}/items`);
+
       onValue(currentItemsRef, (snapshot) => {
-        renderData(snapshot.val());
-        statusBox.textContent = '실시간 보안 자산 지표 동기화 완료';
+        const data = snapshot.val();
+        renderData(data);
+        setStatus('원격 실시간 동기화 상태 원활 (Firebase DB 인라인 상태 완료)');
       }, (error) => {
-        statusBox.textContent = '동기화 통신 거부. 보안 규칙 권한을 분석하십시오.';
+        console.error(error);
+        setStatus('동기화 파이프라인 오류. 클라우드 보안 규칙(Security Rules) 릴리즈 상태를 확인하십시오.');
       });
     }
 
     function stopRealtimeDataListener() {
-      if (currentItemsRef) { off(currentItemsRef); currentItemsRef = null; }
+      if (currentItemsRef) {
+        off(currentItemsRef);
+        currentItemsRef = null;
+      }
     }
 
     addBtn.addEventListener('click', addData);
-    refreshBtn.addEventListener('click', () => { if (currentUser) startRealtimeDataListener(currentUser.uid); });
 
     async function addData() {
-      if (!currentUser) return;
+      if (!currentUser) {
+        alert('유효 인가 증명이 상실되었습니다. 재인증 처리가 요구됩니다.');
+        return;
+      }
+
       const title = titleInput.value.trim();
       const content = contentInput.value.trim();
-      if (!title || !content) { alert('지표 명칭과 요약 자산 스케일을 기입하십시오.'); return; }
+
+      if (!title || !content) {
+        alert('분석 지표 제목과 세부 요약 원고 사양을 구체적으로 확정하여 주십시오.');
+        return;
+      }
+
       try {
         const itemsRef = ref(database, `users/${currentUser.uid}/items`);
-        await set(push(itemsRef), { title, content, createdAt: new Date().toLocaleString('ko-KR'), updatedAt: '' });
-        titleInput.value = ''; contentInput.value = '';
-      } catch (error) { alert('데이터 허브 원장 기입 실패'); }
+        const newItemRef = push(itemsRef);
+
+        await set(newItemRef, {
+          title,
+          content,
+          createdAt: new Date().toLocaleString('ko-KR'),
+          updatedAt: ''
+        });
+
+        titleInput.value = '';
+        contentInput.value = '';
+      } catch (error) {
+        console.error(error);
+        alert('인프라 트랜잭션 도중 추가 쿼리 거부 반응 발생.');
+      }
     }
 
     window.deleteData = async function(id) {
-      if (!currentUser || !confirm('이 금융 자산 지표 원장을 완전히 말소하시겠습니까?')) return;
-      try { await remove(ref(database, `users/${currentUser.uid}/items/${id}`)); } 
-      catch (error) { alert('말소 트랜잭션 오류'); }
+      if (!currentUser) return;
+      const isConfirmed = confirm('선택한 비즈니스 데이터 자산을 영구 소멸시키겠습니까?');
+      if (!isConfirmed) return;
+
+      try {
+        await remove(ref(database, `users/${currentUser.uid}/items/${id}`));
+      } catch (error) {
+        console.error(error);
+        alert('영구 파괴 트랜잭션 에러.');
+      }
     };
 
     window.updateData = async function(id) {
       if (!currentUser) return;
       const editTitle = document.getElementById(`edit-title-${id}`).value.trim();
       const editContent = document.getElementById(`edit-content-${id}`).value.trim();
-      if (!editTitle || !editContent) { alert('수정 변경값 누락'); return; }
+
+      if (!editTitle || !editContent) {
+        alert('변경 사항 기재 필드를 공백으로 남겨둘 수 없습니다.');
+        return;
+      }
+
       try {
         await update(ref(database, `users/${currentUser.uid}/items/${id}`), {
-          title: editTitle, content: editContent, updatedAt: new Date().toLocaleString('ko-KR')
+          title: editTitle,
+          content: editContent,
+          updatedAt: new Date().toLocaleString('ko-KR')
         });
-        startRealtimeDataListener(currentUser.uid);
-      } catch (error) { alert('원장 수정 오퍼레이션 에러'); }
+      } catch (error) {
+        console.error(error);
+        alert('인라인 데이터 패치(Patch) 통신 프로세스 장애.');
+      }
     };
 
     function renderData(data) {
       dataList.innerHTML = '';
-      if (!data) { dataList.innerHTML = '<div class="empty">기입된 리스크 추적 금융 데이터 트랙이 부재합니다.</div>'; return; }
-      Object.entries(data).reverse().forEach(([id, item]) => {
+      if (!data) {
+        dataList.innerHTML = '<div class="empty">현재 데이터 허브에 등록된 경영 지표 및 마케팅 전략 자산이 공백 상태입니다.</div>';
+        return;
+      }
+
+      const entries = Object.entries(data).reverse();
+      entries.forEach(([id, item]) => {
         const div = document.createElement('div');
-        div.className = 'item'; div.id = `item-${id}`;
+        div.className = 'item';
+        div.id = `item-${id}`;
+
         div.innerHTML = `
           <div>
             <p class="item-title">${escapeHTML(item.title || '')}</p>
             <p class="item-content">${escapeHTML(item.content || '')}</p>
-            <div class="item-date">원장 기입: ${item.createdAt || '-'} ${item.updatedAt ? ` / 최근 변경 변동: ${item.updatedAt}` : ''}</div>
+            <div class="item-date">
+              계계 시점: ${item.createdAt || '-'}
+              ${item.updatedAt ? ` / 최신 패치 보정: ${item.updatedAt}` : ''}
+            </div>
           </div>
           <div class="item-actions">
-            <button class="edit-btn" onclick="showEditForm('${id}', '${escapeForAttribute(item.title || '')}', '${escapeForAttribute(item.content || '')}')">변경</button>
+            <button class="edit-btn" onclick="showEditForm('${id}', '${escapeForAttribute(item.title || '')}', '${escapeForAttribute(item.content || '')}')">수정 개정</button>
             <button class="delete-btn" onclick="deleteData('${id}')">말소</button>
           </div>
         `;
@@ -515,75 +760,195 @@
     }
 
     window.showEditForm = function(id, title, content) {
-      document.getElementById(`item-${id}`).innerHTML = `
+      const itemBox = document.getElementById(`item-${id}`);
+      itemBox.innerHTML = `
         <div class="edit-box">
           <input id="edit-title-${id}" type="text" value="${title}" />
           <input id="edit-content-${id}" type="text" value="${content}" />
-          <button class="save-btn" onclick="updateData('${id}')">원장반영</button>
-          <button class="cancel-btn" onclick="startRealtimeDataListener(currentUser.uid)">롤백</button>
+          <button class="save-btn" onclick="updateData('${id}')">확정 커밋</button>
+          <button class="cancel-btn" onclick="location.reload()">롤백 취소</button>
         </div>
       `;
     };
 
-    // 📊 [기능 2] AI 금융 리서치 컨설팅 (ChatGPT 연동)
+    function escapeHTML(text) {
+      return String(text)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+    function escapeForAttribute(text) {
+      return escapeHTML(text).replaceAll('`', '&#096;');
+    }
+
+    function getKoreanErrorMessage(code) {
+      switch (code) {
+        case 'auth/email-already-in-use': return '이미 가입 처리되어 있는 아이디 메일입니다.';
+        case 'auth/invalid-email': return '이메일 포맷 설계 표준과 불일치합니다.';
+        case 'auth/weak-password': return '비밀번호 암호 복잡성 사양이 너무 저조합니다. (6자 이상)';
+        case 'auth/user-not-found': return '등록된 인적 정보에 식별자가 부재합니다.';
+        case 'auth/wrong-password': return '인증용 크레덴셜 암호 정보 오작동.';
+        case 'auth/invalid-credential': return '식별자 메일 또는 암호 세팅의 논리적 오류.';
+        case 'auth/network-request-failed': return '클라이언트 오프라인 상태 혹은 통신 레이턴시 폭발.';
+        default: return `예외 핸들러 시그널 코드 검출 코드명: ${code}`;
+      }
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key !== 'Enter') return;
+      const activeId = document.activeElement.id;
+      if (activeId === 'emailInput' || activeId === 'passwordInput') loginBtn.click();
+      if (activeId === 'titleInput' || activeId === 'contentInput') addBtn.click();
+    });
+  </script>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // 💡 핵심 교정 파트: 두 기능의 중계 통신망을 통합 엔드포인트(APPS_SCRIPT_URL)로 단일화
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDNMIktE288seW2Mr5YgksYFeAP3SNl8YyQZFa1DuvD0N_8pjRLDmxkZBYyQ4WGPmt/exec';
+    
+    const questionInput = document.getElementById('questionInput');
+    const answerBox = document.getElementById('answerBox');
+    const aiStatusBox = document.getElementById('aiStatus');
+    const askBtn = document.getElementById('askBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
     askBtn.addEventListener('click', askChatGPT);
+    clearBtn.addEventListener('click', () => {
+      questionInput.value = '';
+      answerBox.textContent = '전략 분석 쿼리가 대기 상태입니다. 질의를 작성한 뒤 실행을 요청하십시오.';
+      aiStatusBox.textContent = '';
+    });
+
+    questionInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) {
+        askChatGPT();
+      }
+    });
+
     async function askChatGPT() {
       const question = questionInput.value.trim();
-      if (!question) { alert('금융 마켓 쿼리를 인풋하십시오.'); return; }
+      if (!question) {
+        alert('AI에게 경영 질문을 전달할 프롬프트 시나리오를 인젝션하십시오.');
+        return;
+      }
       try {
-        askBtn.disabled = true; askBtn.textContent = '연산 중...';
-        answerBox.textContent = 'AI 월스트리트 인텔리전스 노드에서 고도 금융 분석서 리포트를 연산 중입니다...';
-        consultingStatus.textContent = '보안 프록시 게이트웨이를 경유하는 중...';
+        setAiLoading(true);
+        answerBox.textContent = '경영 빅데이터 추론 모델 엔진 가동 및 리포트 제너레이팅 중...';
+        aiStatusBox.textContent = 'GAS 게이트웨이를 거쳐 OpenAI 네트워크망 인바운드 인스턴스 전송 진행 중...';
 
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ question: question })
+          body: JSON.stringify({ question: question }) // 일반 텍스트 질문 포맷
         });
         const data = await response.json();
+
         if (data.error) throw new Error(data.error);
 
-        answerBox.textContent = data.answer || '리포트 파싱 실패';
-        consultingStatus.textContent = '금융 분석 포트폴리오 리포트 도출 성공';
+        answerBox.textContent = data.answer || '리포트 추출 실패.';
+        aiStatusBox.textContent = '비즈니스 전략 리포트 산출 모듈 프로세스 완료.';
       } catch (error) {
-        answerBox.textContent = '금융 클라우드 서버 아키텍처 예외 트랩:\n\n' + error.message;
-        consultingStatus.textContent = '트랜잭션 세션 아웃';
-      } finally { askBtn.disabled = false; askBtn.textContent = '분석 리포트 생성'; }
+        console.error(error);
+        answerBox.textContent = '원격 노드 통신 오류 발생:\n\n' + error.message;
+        aiStatusBox.textContent = '전략 쿼리 컴파일 실패';
+      } finally {
+        setAiLoading(false);
+      }
     }
 
-    // 🎙️ [기능 3] 금융 리포트 청각화 스트리밍 시스템 (OpenAI TTS 연동)
+    function setAiLoading(isLoading) {
+      askBtn.disabled = isLoading;
+      askBtn.textContent = isLoading ? '전략 연산 중...' : '분석 요청 실행';
+    }
+
+
+    // 탭 3: OpenAI TTS 기반 스크립트 제어
+    const textInput = document.getElementById('textInput');
+    const modelSelect = document.getElementById('modelSelect');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const speedInput = document.getElementById('speedInput');
+    const makeBtn = document.getElementById('makeBtn');
+    const clearTtsBtn = document.getElementById('clearTtsBtn');
+    const ttsStatusBox = document.getElementById('ttsStatus');
+    const resultBox = document.getElementById('resultBox');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const downloadLink = document.getElementById('downloadLink');
+
     makeBtn.addEventListener('click', makeSpeech);
+    clearTtsBtn.addEventListener('click', () => {
+      textInput.value = '';
+      ttsStatusBox.textContent = '';
+      audioPlayer.removeAttribute('src');
+      downloadLink.href = '#';
+      resultBox.classList.add('hidden');
+    });
+
+    textInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) {
+        makeSpeech();
+      }
+    });
+
     async function makeSpeech() {
       const text = textInput.value.trim();
       const model = modelSelect.value;
       const voice = voiceSelect.value;
       const speed = Number(speedInput.value || 1.0);
 
-      if (!text) { alert('오디오 파일로 압축 인코딩 변환할 원고 텍스트 스트링이 누락되었습니다.'); return; }
+      if (!text) {
+        alert('오디오 트랜스포메이션을 집행할 내레이션 콘텐츠 시나리오 원고를 인젝션하십시오.');
+        return;
+      }
+      if (speed < 0.25 || speed > 4.0) {
+        alert('재생 속도 가중치는 안전 바운더리 규격(0.25 ~ 4.0) 내로 통제되어야 합니다.');
+        return;
+      }
+
       try {
-        makeBtn.disabled = true; makeBtn.textContent = '빌드 중...';
+        setTtsLoading(true);
         resultBox.classList.add('hidden');
-        ttsStatus.textContent = 'OpenAI Neural TTS 미들웨어 서버 인코딩 프로세스 구동 중...';
+        ttsStatusBox.textContent = '클라우드 인공지능 음성 합성 인프라(Neural TTS) 가동 컴파일 중...';
 
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
-            type: 'tts', // 오디오 서버 유무 식별용 플래그
-            text: text, model: model, voice: voice, speed: speed
+            type: 'tts', // 구글 앱스 스크립트 서버가 tts 로직을 수행하도록 트리거하는 식별용 플래그
+            text: text,
+            model: model,
+            voice: voice,
+            speed: speed
           })
         });
         const data = await response.json();
+
         if (data.error) throw new Error(data.error);
-        if (!data.audioBase64) throw new Error('바이너리 인코딩 스트림 파싱 에러 발생.');
+        if (!data.audioBase64) throw new Error('바이너리 인코딩 스트림 반환 실패.');
 
         const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
         audioPlayer.src = audioUrl;
         downloadLink.href = audioUrl;
-        downloadLink.download = `FIN-REPORT-${new Date().toISOString().slice(0,10)}.mp3`;
+        downloadLink.download = `BusinessAsset_${Math.floor(Date.now()/1000)}.mp3`;
         resultBox.classList.remove('hidden');
-        ttsStatus.textContent = '금융 오디오 자산 인코딩 트랜잭션 정상 확정';
+        ttsStatusBox.textContent = '인공지능 오디오 자산 렌더링 세션 성공 완료.';
       } catch (error) {
-        ttsStatus.textContent = '프로세싱 드롭'; alert('TTS 아키텍처 예외 크래시:\n\n' + error.message);
-      } finally { makeBtn.disabled = false; makeBtn.textContent = '음성 자산 빌드'; }
+        console.error(error);
+        ttsStatusBox.textContent = '오디오 합성 엔진 통신 폴트';
+        alert('컴파일 타임 에러 디버그 보고서:\n\n' + error.message);
+      } finally {
+        setTtsLoading(false);
+      }
     }
 
     function base64ToAudioUrl(base64, mimeType) {
@@ -592,35 +957,19 @@
       for (let offset = 0; offset < byteCharacters.length; offset += 512) {
         const slice = byteCharacters.slice(offset, offset + 512);
         const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) { byteNumbers[i] = slice.charCodeAt(i); }
-        byteArrays.push(new Uint8Array(byteNumbers));
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
       }
-      return URL.createObjectURL(new Blob(byteArrays, { type: mimeType }));
+      const blob = new Blob(byteArrays, { type: mimeType });
+      return URL.createObjectURL(blob);
     }
 
-    // 초기화 유틸리티
-    window.clearConsulting = function() { questionInput.value = ''; answerBox.textContent = '전략 질의 대기 중...'; consultingStatus.textContent = ''; };
-    window.clearTTS = function() { textInput.value = ''; ttsStatus.textContent = ''; audioPlayer.removeAttribute('src'); resultBox.classList.add('hidden'); };
-
-    function escapeHTML(text) { return String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
-    function escapeForAttribute(text) { return escapeHTML(text).replaceAll('`', '&#096;'); }
-
-    document.addEventListener('keydown', function(event) {
-      if (event.key !== 'Enter') return;
-      const activeId = document.activeElement.id;
-      if (activeId === 'emailInput' || activeId === 'passwordInput') loginBtn.click();
-      if (activeId === 'titleInput' || activeId === 'contentInput') addBtn.click();
-      if (event.ctrlKey && activeId === 'questionInput') askChatGPT();
-      if (event.ctrlKey && activeId === 'textInput') makeSpeech();
-    });
-
-    function getKoreanErrorMessage(code) {
-      switch (code) {
-        case 'auth/email-already-in-use': return '이미 허브가 구축된 보안 마스터 계정 메일입니다.';
-        case 'auth/weak-password': return '패스워드 강도가 취약합니다. 6자리 이상의 복합 규격을 적용하십시오.';
-        case 'auth/invalid-credential': return '인증 인프라 신원 기입이 누락되었거나 일치하지 않습니다.';
-        default: return `연동 인프라 네트워크 시그널 디바이스 에러: ${code}`;
-      }
+    function setTtsLoading(isLoading) {
+      makeBtn.disabled = isLoading;
+      makeBtn.textContent = isLoading ? '사운드 렌더링 중...' : '음성 자산 빌드';
     }
   </script>
 </body>
