@@ -351,23 +351,22 @@
 
     // 🔗 [설정 A] 파이어베이스 연동 보안 식별 구조 키셋
     const firebaseConfig = {
-      apiKey: 'AIzaSyDO-v52Ehwphh5gW0WBzu9_DliMhOzy4Yo',
-      authDomain: 'kang-f4e85.firebaseapp.com',
-      databaseURL: 'https://kang-f4e85-default-rtdb.firebaseio.com',
-      projectId: 'kang-f4e85',
-      storageBucket: 'kang-f4e85.firebasestorage.app',
-      messagingSenderId: '107057126084',
-      appId: '1:107057126084:web:30f7bcb3f25dd2aa4a0791',
-      measurementId: 'G-DJ52YTYQZM'
+      apiKey: "AIzaSyDG_Rb40GvwisGKDtSqLXUYN87JO7tsdSE",
+      authDomain: "test-ad453.firebaseapp.com",
+      databaseURL: "https://test-ad453-default-rtdb.firebaseio.com",
+      projectId: "test-ad453",
+      storageBucket: "test-ad453.firebasestorage.app",
+      messagingSenderId: "595840516346",
+      appId: "1:595840516346:web:7faa85b427d422d926c943",
+      measurementId: "G-WYJ960780L"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
     // 🔗 [설정 B] 구글 앱스 스크립트(GAS) 프록시 보안 서버 미들웨어 우회 엔드포인트
     // (이전 대화에서 나눴던 ChatGPT 및 TTS 병합 처리가 완료된 통합 GAS 웹앱 URL입니다)
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDNMIktE288seW2Mr5YgksYFeAP3SNl8YyQZFa1DuvD0N_8pjRLDmxkZBYyQ4WGPmt/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ_5oRLzvaiK9km-GpbrpuH3cgqZjs7_aF6BZUCwWmrNggSdFf5MmyjtuJYT3Hln8/exec';
 
     // UI 요소 포인터 바인딩
     const authSection = document.getElementById('authSection');
